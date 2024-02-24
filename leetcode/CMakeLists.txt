@@ -1,0 +1,1 @@
+add_executable(46_permute 46_permute.cpp)
