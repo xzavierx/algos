@@ -5,5 +5,5 @@ cmake_minimum_required(VERSION 2.11)
 project(algos)
 
 add_subdirectory(merge_sort)
-
 add_subdirectory(leetcode)
+add_subdirectory(splay)

@@ -1,1 +1,2 @@
 add_executable(46_permute 46_permute.cpp)
+add_executable(46_permute_non_recursive 46_permute_non_recursive.cpp)
