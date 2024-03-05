@@ -46,11 +46,51 @@ struct Splay {
     maintain(y); // y 已经属于x的儿子了，先操作y
     maintain(x);
   }
+  // splay操作
+  /*
+    zig:                            zig-zag:
+      y          x                   z             x
+     /    ===>    \                 /             / \ 
+    x              y               y      ===>   y   z 
+    y              x                \
+     \    ===>    /                  x 
+      x          y 
+                                     z 
+    zig-zig                           \            x
+        z        x                     y  ===>    / \ 
+       /          \                   /          z   y
+      y   ===>     y                 x
+     /              \
+    x                z
+    z                x
+     \              /
+      y            y
+       \          /
+        x        z
+  */
+  //根据上面这几种状态进行
+  // void splay(int x) {
+  //   for (int f = fa[x]; f = fa[x], f; rotate(x))
+  //     if (fa[f]) rotate(get(x) == get(f) ? f : x);
+  //   rt = x;
+  // }
 
-  void splay(int x) {
-    for (int f = fa[x]; f = fa[x], f; rotate(x))
-      if (fa[f]) rotate(get(x) == get(f) ? f : x);
-    rt = x;
+  // 如果想找到序列区间[L, R]代表的子树，只需要将代表aL-1的节点Splay到根，
+  // 再将代表aR+1的节点Splay到根的右儿子即可
+  // 以[1, 3]举例，首先调用splay(1), 会将1 splay到根，然后splay(3, 1)
+  // 下面代码的结束条件就是(fa[x] != goal)，所以一定会3的父节点必须是1(右儿子)
+  void splay(int x, int goal = 0) { 
+    if (goal == 0) rt = x;
+    while (fa[x] != goal) {
+      int f = fa[x], g = fa[fa[x]];
+      if (g != goal) {
+        if (get(f) == get(x)) 
+          rotate(x);
+        else 
+          rotate(f);
+      }
+      rotate(x);
+    }
   }
 
   void ins(int k) {
@@ -79,10 +119,24 @@ struct Splay {
         ch[f][val[f] < k] = tot;
         maintain(tot);
         maintain(f);
-        // if (val[tot] != 5) {
-          splay(tot);
-        // }
+        splay(tot);
         break;
+      }
+    }
+  }
+
+  int kth(int k) {
+    int cur = rt;
+    while (1) {
+      if (ch[cur][0] && k <= sz[ch[cur][0]]) {
+        cur = ch[cur][0];
+      } else {
+        k -= cnt[cur] + sz[ch[cur][0]];
+        if (k <= 0) {
+          splay(cur);
+          return val[cur];
+        }
+        cur = ch[cur][1];
       }
     }
   }
@@ -212,8 +266,11 @@ int main() {
   s.ins(2);
   s.ins(4);
   s.ins(5);
-  // s.ins(1);
+  s.ins(1);
+  s.ins(2);
   s.show();
+  cout << s.kth(3) << endl;
+  cout << s.rk(3) << endl;
 }
 
 
