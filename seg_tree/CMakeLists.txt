@@ -1,0 +1,1 @@
+add_executable(seg_tree_lazy_range_add seg_tree_lazy_range_add.cpp)
