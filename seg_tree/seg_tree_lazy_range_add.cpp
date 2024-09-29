@@ -1,5 +1,6 @@
 #include <fstream>
 #include <vector>
+#include <iostream>
 using namespace std;
 template<typename T>
 class SegTreeLazyRangeAdd {
@@ -89,4 +90,5 @@ int main() {
   vector<int> a = {10, 11, 12, 13, 14, 15};
   SegTreeLazyRangeAdd<int> seg(a);
   auto sum = seg.range_sum(1, 4);
+  std::cout << sum << std::endl;
 }
